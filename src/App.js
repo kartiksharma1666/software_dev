@@ -1,20 +1,62 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+
+// Import Screens
+import HomePage from './Screens/HomePage';
+import Marketplace from './Screens/marketplace/Marketplace';
+import Listing from './Screens/marketplace/Listing';
+import ProductPortfolio from './Screens/marketplace/ProductPortfolio';
+import BlogPost from './Screens/marketplace/BlogPost';
+import BlogList from './Screens/marketplace/BlogList';
+
+// Import Components
+import NavBar_Marketplace from "./components/NavBar_Marketplace";
+import BottomBar from "./components/BottomBar";
+import { analytics } from "./config/firebase";
+import { logEvent } from "firebase/analytics";
+import './index.css'; // Import the global stylesheet
+import { getLocation } from './helperFunctions/MarketplaceHelper';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <h1 className="text-3xl font-bold underline">
-          Hello world!
-        </h1>
-      </header>
-    </div>
-  );
+    const location = useLocation();
+    const isHomePage = location.pathname === '/';
+    const isGymsDashboard = location.pathname === '/GymsDashboard';
+
+    const [userCity, setUserCity] = useState(null);
+
+    useEffect(() => {
+        // Log an event when the user enters the app
+        // Capture the user's browser type
+        const currentTime = new Date().toISOString();
+        const userAgent = navigator.userAgent;
+        logEvent(analytics, `${userAgent}, ${currentTime}`);
+    }, []);
+
+    useEffect(() => {
+        setUserCity(getLocation());
+    }, []);
+
+    return (
+        <div className="App pt-36" >
+            {!isGymsDashboard && (
+                <NavBar_Marketplace
+                    textColor={isHomePage ? 'text-white' : 'text-black'}
+                    borderColor={isHomePage ? 'border-white' : 'border-gray-300'}
+                    bgColor={isHomePage ? 'bg-gray-800' : 'bg-white'}
+                />
+            )}
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/Marketplace" element={<Marketplace />} />
+                <Route path="/Listing" element={<Listing />} />
+                <Route path="/ProductPortfolio" element={<ProductPortfolio />} />
+                <Route path="/BlogList" element={<BlogList />} />
+                <Route path="/BlogPost" element={<BlogPost />} />
+            </Routes>
+            {/* Conditionally render the BottomBar */}
+            {!isGymsDashboard && <BottomBar />}
+        </div>
+    );
 }
 
 export default App;
