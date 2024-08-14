@@ -16,6 +16,9 @@ import { analytics } from "./config/firebase";
 import { logEvent } from "firebase/analytics";
 import './index.css'; // Import the global stylesheet
 import { getLocation } from './helperFunctions/MarketplaceHelper';
+import TCPage from './Screens/TCPage';
+import Careers from './Screens/careers';
+import PPPage from './Screens/PPPage';
 
 function App() {
     const location = useLocation();
