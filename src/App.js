@@ -52,6 +52,9 @@ function App() {
                 <Route path="/ProductPortfolio" element={<ProductPortfolio />} />
                 <Route path="/BlogList" element={<BlogList />} />
                 <Route path="/BlogPost" element={<BlogPost />} />
+                <Route path="/TCPage" element={<TCPage />} />
+                <Route path="/PPPage" element={<PPPage />} />
+                <Route path="/careers" element={<Careers />} />
             </Routes>
             {/* Conditionally render the BottomBar */}
             {!isGymsDashboard && <BottomBar />}
